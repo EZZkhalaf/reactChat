@@ -1,11 +1,17 @@
 import React from "react";
 import getConversationHook from "../../Hooks/getConversationHook";
 import useConversation from "../../zustand/useConversation";
+import { useSocketContext } from "../../context/socketContext";
+
 
  const Conversation1 = ({conversation , emoji }) =>{
     const {selectedConvo , setSelectedConvo } =   useConversation();
 
     const isSelected = selectedConvo?._id === conversation._id;//for define the selected convo using zustand hook
+    const {onlineUsers} = useSocketContext();
+    const isOnline = onlineUsers.includes(conversation._id);
+
+
     return (
         
         <div>
@@ -17,7 +23,7 @@ import useConversation from "../../zustand/useConversation";
                 
                 
                 >
-                    <div className="avatar online">
+                    <div className={`avatar ${isOnline ? "online" : " "}`}>
                         <div className="w-10 h-10 rounded-full ">
                             <img src={conversation.profilepicture} alt="user " className="roundPhoto"/>
                                                         

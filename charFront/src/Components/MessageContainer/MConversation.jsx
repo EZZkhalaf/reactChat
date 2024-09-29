@@ -48,6 +48,7 @@ import React, { useEffect } from "react";
 import Messages from './Messages.jsx';
 import { MessageInp } from "./MessageInp.jsx";
 import useConversation from "../../zustand/useConversation.js";
+import { useAuthContext } from "../../context/authContext.jsx";
 
 
 
@@ -91,11 +92,13 @@ const MConversation = () => {
 export default MConversation;
 
 export const NoChat = () =>{
+  const {auth_user} = useAuthContext();
   return (
     <div className="flex items-center justify-center w-full h-full ">
       <div  className="px-4 text-center sm:text-lg md:text-xl text-blue-300
        font-semibold flex flex-col items-center gap-2">
-          <p>welcome fatcat</p>
+          <p>hello {auth_user.fullName}</p>
+          <p>select a chat </p>
           {/* <TiMessages className="text-3xl md:text-6xl text-center"/> */}
       </div>
     </div>

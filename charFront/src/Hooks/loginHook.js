@@ -27,7 +27,7 @@ const loginHook = () =>{
             if(data.error){
                 throw new Error (data.error);
             }
-            console.log(data) ; 
+           
 
             localStorage.setItem("chatUser" , JSON.stringify(data));
             

@@ -13,6 +13,7 @@ const getMessagesHook = () =>{
             setLoading(true);
             try{
                 const res = await fetch(`/api/messages/${selectedConvo._id}`);
+                
                 const data = await res.json();
                 if(data.error){
                     throw new Error(data.error);
@@ -30,12 +31,13 @@ const getMessagesHook = () =>{
             }finally{
                 setLoading(false)
             }
-        }
+        };
+
         if(selectedConvo?._id) getMessages();
 
     },[selectedConvo?._id,setMessages])
 
-    return {messages , loading}
-}
+    return {messages , loading};
+};
 
 export default getMessagesHook;

@@ -1,7 +1,8 @@
 import express  from 'express';
 import Conversation from '../models/conversation.js';
 import Message from '../models/messages.js';
-
+import { getSocketRecieverId } from '../socket/socket.js';
+import { io } from '../socket/socket.js';
 
 export  const sendMessage = async (req,res) =>{
     try{    
@@ -9,28 +10,44 @@ export  const sendMessage = async (req,res) =>{
         const {id : recieverId} = req.params;
         const senderId = req.user._id
 
-
+        
         let conversation =  await Conversation.findOne({
             participants : {$all : [senderId , recieverId]},
 
         });
+        
         if(!conversation){
             conversation = await Conversation.create({
                 participants: [senderId , recieverId],
             })
         }
+        
 
         const newMessage = new Message({
             senderId,
             recieverId,
             message
         });
-
         if(newMessage){
             conversation.messages.push(newMessage._id); 
         }
+        
+
+//we can run 
+        
         await conversation.save();
-        await newMessage.save();//we can run await Promise.all( conversation.save() , newMessage.save()); and run in parallel
+        await newMessage.save();
+        
+       //or 
+        // await Promise.all( conversation.save() , newMessage.save());
+
+        //socket part
+        const recieverSocketId = getSocketRecieverId(recieverId);
+        if(recieverSocketId){
+            io.to(recieverSocketId).emit("newMessage" , newMessage);//io.to used to send specific event to a specific client
+        }
+        
+
 
         res.status(201).json("message sent successfully ");
 

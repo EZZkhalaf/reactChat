@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 
 const mongoConnect = async()=>{
     try{
@@ -8,5 +8,8 @@ const mongoConnect = async()=>{
         console.error("error with connecting to M db ");
     }
 }
+
+
+
 
 export default mongoConnect;
